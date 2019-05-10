@@ -1,0 +1,35 @@
+<html>
+	<head>
+		<style>
+			body {
+				background-color:gray;
+			}
+			h1 {
+				color:white;
+			}
+			p {
+				color:white;
+			}
+			div {
+				color:white;
+			}
+		</style>
+	</head>
+	<body>
+		<script src="jquery.js"></script>
+		<script src="db.js"></script>
+		<script src="index.js"></script>
+		<center>
+			<h1>Enter a rule</h1>
+			<input type="text" id="in"></input><button onclick="outputThings()">Go!</button><br>
+			<input type="checkbox" id="hidesl">Hide still lives</input>
+			<h1>Spaceships</h1>
+			<div id="outputs"></div>
+			<h1>Oscillators</h1>
+			<div id="outputo"></div>
+			<h1>Still lives</h1>
+			<div id="outputsl"></div>
+			
+		</center>
+	</body>
+</html>

@@ -96,383 +96,122 @@ function flipv(n){
 function rotc(n){
 	return [n[6],n[7],n[0],n[1],n[2],n[3],n[4],n[5]]
 }
+function or(v1, v2) { //thanks stackoverflow
+    var hi = 0x80000000;
+    var low = 0x7fffffff;
+    var hi1 = ~~(v1 / hi);
+    var hi2 = ~~(v2 / hi);
+    var low1 = v1 & low;
+    var low2 = v2 & low;
+    var h = hi1 | hi2;
+    var l = low1 | low2;
+    return h*hi + l;
+}
+function xor(v1, v2) { //thanks stackoverflow
+    var hi = 0x80000000;
+    var low = 0x7fffffff;
+    var hi1 = ~~(v1 / hi);
+    var hi2 = ~~(v2 / hi);
+    var low1 = v1 & low;
+    var low2 = v2 & low;
+    var h = hi1 ^ hi2;
+    var l = low1 ^ low2;
+    return h*hi + l;
+}
 function parseRule(rs){
 	var res=0;
 	var res2=0;
-	var i=1;
+	var cn="";
+	var cc=0;
 	var negate=false;
-	var cn=-1;
-	while (rs[i]!="/"){
-		if (/[0-8]/.test(rs[i])&&(/[0-8]/.test(rs[i+1])|rs[i+1]=="/")){
-			switch (parseInt(rs[i],10)){
-				case 0:
-					res+=Math.pow(2,0);
-				break;
-				case 1:
-					res+=Math.pow(2,1);
-					res+=Math.pow(2,2);
-				break;
-				case 2:
-					res+=Math.pow(2,3);
-					res+=Math.pow(2,4);
-					res+=Math.pow(2,5);
-					res+=Math.pow(2,6);
-					res+=Math.pow(2,7);
-					res+=Math.pow(2,8);
-				break;
-				case 3:
-					res+=Math.pow(2,9);
-					res+=Math.pow(2,10);
-					res+=Math.pow(2,11);
-					res+=Math.pow(2,12);
-					res+=Math.pow(2,13);
-					res+=Math.pow(2,14);
-					res+=Math.pow(2,15);
-					res+=Math.pow(2,16);
-					res+=Math.pow(2,17);
-					res+=Math.pow(2,18);
-				break;
-				case 4:
-					res+=Math.pow(2,19);
-					res+=Math.pow(2,20);
-					res+=Math.pow(2,21);
-					res+=Math.pow(2,22);
-					res+=Math.pow(2,23);
-					res+=Math.pow(2,24);
-					res+=Math.pow(2,25);
-					res+=Math.pow(2,26);
-					res+=Math.pow(2,27);
-					res+=Math.pow(2,28);
-					res+=Math.pow(2,29);
-					res+=Math.pow(2,30);
-					res+=Math.pow(2,31);
-				break;
-				case 5:
-					res+=Math.pow(2,32);
-					res+=Math.pow(2,33);
-					res+=Math.pow(2,34);
-					res+=Math.pow(2,35);
-					res+=Math.pow(2,36);
-					res+=Math.pow(2,37);
-					res+=Math.pow(2,38);
-					res+=Math.pow(2,39);
-					res+=Math.pow(2,40);
-					res+=Math.pow(2,41);
-				break;
-				case 6:
-					res+=Math.pow(2,42);
-					res+=Math.pow(2,43);
-					res+=Math.pow(2,44);
-					res+=Math.pow(2,45);
-					res+=Math.pow(2,46);
-					res+=Math.pow(2,47);
-				break;
-				case 7:
-					res+=Math.pow(2,48);
-					res+=Math.pow(2,49);
-				break;
-				case 8:
-					res+=Math.pow(2,50);
-				break;
-				
-			}
+	for (var i=1;i<rs.split("/")[0].length;i++){
+		if (rs[i]=="0"){res=or(res,1)}
+		if (rs[i]=="8"){res=or(res,1125899906842624)}
+		if (rs[i]=="-"){
+			negate=true;
+			if (cn=="0"){cc=1;}
+			if (cn=="1"){cc=6;}
+			if (cn=="2"){cc=504;}
+			if (cn=="3"){cc=523776;}
+			if (cn=="4"){cc=4294443008;}
+			if (cn=="5"){cc=4393751543808;}
+			if (cn=="6"){cc=277076930199552;}
+			if (cn=="7"){cc=844424930131968;}
+			if (cn=="8"){cc=1125899906842624;}
+		}
+		if (/[1-7]/.test(rs[i])){
+			cn=rs[i]
 			negate=false;
-		} else {
-			if (cn!=-1&&!/[1-7]/.test(rs[i])){
-				switch (cn){
-					case 1:
-						res+=Math.pow(2,1)*(negate^rs[i]=="c");
-						res+=Math.pow(2,2)*(negate^rs[i]=="e");
-					break;
-					case 2:
-						res+=Math.pow(2,3)*(negate^rs[i]=="a");
-						res+=Math.pow(2,4)*(negate^rs[i]=="c");
-						res+=Math.pow(2,5)*(negate^rs[i]=="e");
-						res+=Math.pow(2,6)*(negate^rs[i]=="i");
-						res+=Math.pow(2,7)*(negate^rs[i]=="k");
-						res+=Math.pow(2,8)*(negate^rs[i]=="n");
-					break;
-					case 3:
-						res+=Math.pow(2,9)*(negate^rs[i]=="a");
-						res+=Math.pow(2,10)*(negate^rs[i]=="c");
-						res+=Math.pow(2,11)*(negate^rs[i]=="e");
-						res+=Math.pow(2,12)*(negate^rs[i]=="i");
-						res+=Math.pow(2,13)*(negate^rs[i]=="j");
-						res+=Math.pow(2,14)*(negate^rs[i]=="k");
-						res+=Math.pow(2,15)*(negate^rs[i]=="n");
-						res+=Math.pow(2,16)*(negate^rs[i]=="q");
-						res+=Math.pow(2,17)*(negate^rs[i]=="r");
-						res+=Math.pow(2,18)*(negate^rs[i]=="y");
-					break;
-					case 4:
-						res+=Math.pow(2,19)*(negate^rs[i]=="c");
-						res+=Math.pow(2,20)*(negate^rs[i]=="e");
-						res+=Math.pow(2,21)*(negate^rs[i]=="k");
-						res+=Math.pow(2,22)*(negate^rs[i]=="a");
-						res+=Math.pow(2,23)*(negate^rs[i]=="i");
-						res+=Math.pow(2,24)*(negate^rs[i]=="n");
-						res+=Math.pow(2,25)*(negate^rs[i]=="y");
-						res+=Math.pow(2,26)*(negate^rs[i]=="q");
-						res+=Math.pow(2,27)*(negate^rs[i]=="j");
-						res+=Math.pow(2,28)*(negate^rs[i]=="r");
-						res+=Math.pow(2,29)*(negate^rs[i]=="t");
-						res+=Math.pow(2,30)*(negate^rs[i]=="w");
-						res+=Math.pow(2,31)*(negate^rs[i]=="z");
-					break;
-					case 5:
-						res+=Math.pow(2,32)*(negate^rs[i]=="c");
-						res+=Math.pow(2,33)*(negate^rs[i]=="e");
-						res+=Math.pow(2,34)*(negate^rs[i]=="k");
-						res+=Math.pow(2,35)*(negate^rs[i]=="a");
-						res+=Math.pow(2,36)*(negate^rs[i]=="i");
-						res+=Math.pow(2,37)*(negate^rs[i]=="n");
-						res+=Math.pow(2,38)*(negate^rs[i]=="y");
-						res+=Math.pow(2,39)*(negate^rs[i]=="q");
-						res+=Math.pow(2,40)*(negate^rs[i]=="j");
-						res+=Math.pow(2,41)*(negate^rs[i]=="r");
-					break;
-					case 6:
-						res+=Math.pow(2,42)*(negate^rs[i]=="c");
-						res+=Math.pow(2,43)*(negate^rs[i]=="e");
-						res+=Math.pow(2,44)*(negate^rs[i]=="k");
-						res+=Math.pow(2,45)*(negate^rs[i]=="a");
-						res+=Math.pow(2,46)*(negate^rs[i]=="i");
-						res+=Math.pow(2,47)*(negate^rs[i]=="n");
-					break;
-					case 7:
-						res+=Math.pow(2,48)*(negate^rs[i]=="c");
-						res+=Math.pow(2,49)*(negate^rs[i]=="e");
-					break;
-				}
-			}
-			if (rs[i]=="0"){
-				res+=Math.pow(2,0);
-				negate=false;
-			}
-			if (rs[i]=="1"){
-				cn=1;
-				negate=false;
-			}
-			if (rs[i]=="2"){
-				cn=2;
-				negate=false;
-			}
-			if (rs[i]=="3"){
-				cn=3;
-				negate=false;
-			}
-			if (rs[i]=="4"){
-				cn=4;
-				negate=false;
-			}
-			if (rs[i]=="5"){
-				cn=5;
-				negate=false;
-			}
-			if (rs[i]=="6"){
-				cn=6;
-				negate=false;
-			}
-			if (rs[i]=="7"){
-				cn=7;
-				negate=false;
-			}
-			if (rs[i]=="8"){
-				res+=Math.pow(2,50);
-				negate=false;
-			}
-			if (rs[i]=="-"){
-				negate=true;
+			if (/[0-8]/.test(rs[i+1])||rs[i+1]=="/"){
+				if (rs[i]==0){res=or(res,1);}
+				if (rs[i]==1){res=or(res,6);}
+				if (rs[i]==2){res=or(res,504);}
+				if (rs[i]==3){res=or(res,523776);}
+				if (rs[i]==4){res=or(res,4294443008);}
+				if (rs[i]==5){res=or(res,4393751543808);}
+				if (rs[i]==6){res=or(res,277076930199552);}
+				if (rs[i]==7){res=or(res,844424930131968);}
+				if (rs[i]==8){res=or(res,1125899906842624);}
 			}
 		}
-		i++
+		if (/[a-z]/.test(rs[i])){
+			if (ntchars.includes(cn+rs[i])){
+				if(negate){
+					cc=xor(cc,Math.pow(2,ntchars.indexOf(cn+rs[i])));
+				}else{
+					res=or(res,Math.pow(2,ntchars.indexOf(cn+rs[i])));
+				}
+			}
+		}
+		if ((!(/[a-z]|-/.test(rs[i]))||rs[i+1]=="/")&&cc>0){
+			res=or(res,cc)
+		}
 	}
+	cc=0;
 	negate=false;
-	cn=-1;
-	while (rs[i]!=undefined){
-		if (/[0-8]/.test(rs[i])&&(/[0-8]/.test(rs[i+1])|rs[i+1]==undefined)){
-			switch (parseInt(rs[i],10)){
-				case 0:
-					res2+=Math.pow(2,0);
-				break;
-				case 1:
-					res2+=Math.pow(2,1);
-					res2+=Math.pow(2,2);
-				break;
-				case 2:
-					res2+=Math.pow(2,3);
-					res2+=Math.pow(2,4);
-					res2+=Math.pow(2,5);
-					res2+=Math.pow(2,6);
-					res2+=Math.pow(2,7);
-					res2+=Math.pow(2,8);
-				break;
-				case 3:
-					res2+=Math.pow(2,9);
-					res2+=Math.pow(2,10);
-					res2+=Math.pow(2,11);
-					res2+=Math.pow(2,12);
-					res2+=Math.pow(2,13);
-					res2+=Math.pow(2,14);
-					res2+=Math.pow(2,15);
-					res2+=Math.pow(2,16);
-					res2+=Math.pow(2,17);
-					res2+=Math.pow(2,18);
-				break;
-				case 4:
-					res2+=Math.pow(2,19);
-					res2+=Math.pow(2,20);
-					res2+=Math.pow(2,21);
-					res2+=Math.pow(2,22);
-					res2+=Math.pow(2,23);
-					res2+=Math.pow(2,24);
-					res2+=Math.pow(2,25);
-					res2+=Math.pow(2,26);
-					res2+=Math.pow(2,27);
-					res2+=Math.pow(2,28);
-					res2+=Math.pow(2,29);
-					res2+=Math.pow(2,30);
-					res2+=Math.pow(2,31);
-				break;
-				case 5:
-					res2+=Math.pow(2,32);
-					res2+=Math.pow(2,33);
-					res2+=Math.pow(2,34);
-					res2+=Math.pow(2,35);
-					res2+=Math.pow(2,36);
-					res2+=Math.pow(2,37);
-					res2+=Math.pow(2,38);
-					res2+=Math.pow(2,39);
-					res2+=Math.pow(2,40);
-					res2+=Math.pow(2,41);
-				break;
-				case 6:
-					res2+=Math.pow(2,42);
-					res2+=Math.pow(2,43);
-					res2+=Math.pow(2,44);
-					res2+=Math.pow(2,45);
-					res2+=Math.pow(2,46);
-					res2+=Math.pow(2,47);
-				break;
-				case 7:
-					res2+=Math.pow(2,48);
-					res2+=Math.pow(2,49);
-				break;
-				case 8:
-					res2+=Math.pow(2,50);
-				break;
-				
-			}
+	cn="";
+	for (var i=rs.indexOf("S")+1;i<rs.length;i++){
+		if (rs[i]=="0"){res2=or(res2,1)}
+		if (rs[i]=="8"){res2=or(res2,1125899906842624)}
+		if (rs[i]=="-"){
+			negate=true;
+			if (cn=="0"){cc=1;}
+			if (cn=="1"){cc=6;}
+			if (cn=="2"){cc=504;}
+			if (cn=="3"){cc=523776;}
+			if (cn=="4"){cc=4294443008;}
+			if (cn=="5"){cc=4393751543808;}
+			if (cn=="6"){cc=277076930199552;}
+			if (cn=="7"){cc=844424930131968;}
+			if (cn=="8"){cc=1125899906842624;}
+		}
+		if (/[1-7]/.test(rs[i])){
+			cn=rs[i]
 			negate=false;
-		} else {
-			if (cn!=-1&&!/[1-7]/.test(rs[i])){
-				switch (cn){
-					case 1:
-						res2+=Math.pow(2,1)*(negate^rs[i]=="c");
-						res2+=Math.pow(2,2)*(negate^rs[i]=="e");
-					break;
-					case 2:
-						res2+=Math.pow(2,3)*(negate^rs[i]=="a");
-						res2+=Math.pow(2,4)*(negate^rs[i]=="c");
-						res2+=Math.pow(2,5)*(negate^rs[i]=="e");
-						res2+=Math.pow(2,6)*(negate^rs[i]=="i");
-						res2+=Math.pow(2,7)*(negate^rs[i]=="k");
-						res2+=Math.pow(2,8)*(negate^rs[i]=="n");
-					break;
-					case 3:
-						res2+=Math.pow(2,9)*(negate^rs[i]=="a");
-						res2+=Math.pow(2,10)*(negate^rs[i]=="c");
-						res2+=Math.pow(2,11)*(negate^rs[i]=="e");
-						res2+=Math.pow(2,12)*(negate^rs[i]=="i");
-						res2+=Math.pow(2,13)*(negate^rs[i]=="j");
-						res2+=Math.pow(2,14)*(negate^rs[i]=="k");
-						res2+=Math.pow(2,15)*(negate^rs[i]=="n");
-						res2+=Math.pow(2,16)*(negate^rs[i]=="q");
-						res2+=Math.pow(2,17)*(negate^rs[i]=="r");
-						res2+=Math.pow(2,18)*(negate^rs[i]=="y");
-					break;
-					case 4:
-						res2+=Math.pow(2,19)*(negate^rs[i]=="c");
-						res2+=Math.pow(2,20)*(negate^rs[i]=="e");
-						res2+=Math.pow(2,21)*(negate^rs[i]=="k");
-						res2+=Math.pow(2,22)*(negate^rs[i]=="a");
-						res2+=Math.pow(2,23)*(negate^rs[i]=="i");
-						res2+=Math.pow(2,24)*(negate^rs[i]=="n");
-						res2+=Math.pow(2,25)*(negate^rs[i]=="y");
-						res2+=Math.pow(2,26)*(negate^rs[i]=="q");
-						res2+=Math.pow(2,27)*(negate^rs[i]=="j");
-						res2+=Math.pow(2,28)*(negate^rs[i]=="r");
-						res2+=Math.pow(2,29)*(negate^rs[i]=="t");
-						res2+=Math.pow(2,30)*(negate^rs[i]=="w");
-						res2+=Math.pow(2,31)*(negate^rs[i]=="z");
-					break;
-					case 5:
-						res2+=Math.pow(2,32)*(negate^rs[i]=="c");
-						res2+=Math.pow(2,33)*(negate^rs[i]=="e");
-						res2+=Math.pow(2,34)*(negate^rs[i]=="k");
-						res2+=Math.pow(2,35)*(negate^rs[i]=="a");
-						res2+=Math.pow(2,36)*(negate^rs[i]=="i");
-						res2+=Math.pow(2,37)*(negate^rs[i]=="n");
-						res2+=Math.pow(2,38)*(negate^rs[i]=="y");
-						res2+=Math.pow(2,39)*(negate^rs[i]=="q");
-						res2+=Math.pow(2,40)*(negate^rs[i]=="j");
-						res2+=Math.pow(2,41)*(negate^rs[i]=="r");
-					break;
-					case 6:
-						res2+=Math.pow(2,42)*(negate^rs[i]=="c");
-						res2+=Math.pow(2,43)*(negate^rs[i]=="e");
-						res2+=Math.pow(2,44)*(negate^rs[i]=="k");
-						res2+=Math.pow(2,45)*(negate^rs[i]=="a");
-						res2+=Math.pow(2,46)*(negate^rs[i]=="i");
-						res2+=Math.pow(2,47)*(negate^rs[i]=="n");
-					break;
-					case 7:
-						res2+=Math.pow(2,48)*(negate^rs[i]=="c");
-						res2+=Math.pow(2,49)*(negate^rs[i]=="e");
-					break;
-				}
-			}
-			if (rs[i]=="0"){
-				res2+=Math.pow(2,0);
-				negate=false;
-			}
-			if (rs[i]=="1"){
-				cn=1;
-				negate=false;
-			}
-			if (rs[i]=="2"){
-				cn=2;
-				negate=false;
-			}
-			if (rs[i]=="3"){
-				cn=3;
-				negate=false;
-			}
-			if (rs[i]=="4"){
-				cn=4;
-				negate=false;
-			}
-			if (rs[i]=="5"){
-				cn=5;
-				negate=false;
-			}
-			if (rs[i]=="6"){
-				cn=6;
-				negate=false;
-			}
-			if (rs[i]=="7"){
-				cn=7;
-				negate=false;
-			}
-			if (rs[i]=="8"){
-				res2+=Math.pow(2,50);
-				negate=false;
-			}
-			if (rs[i]=="-"){
-				negate=true;
+			if (/[0-8]/.test(rs[i+1])||rs[i+1]==undefined){
+				if (rs[i]==0){res2=or(res2,1);}
+				if (rs[i]==1){res2=or(res2,6);}
+				if (rs[i]==2){res2=or(res2,504);}
+				if (rs[i]==3){res2=or(res2,523776);}
+				if (rs[i]==4){res2=or(res2,4294443008);}
+				if (rs[i]==5){res2=or(res2,4393751543808);}
+				if (rs[i]==6){res2=or(res2,277076930199552);}
+				if (rs[i]==7){res2=or(res2,844424930131968);}
+				if (rs[i]==8){res2=or(res2,1125899906842624);}
 			}
 		}
-		i++
+		if (/[a-z]/.test(rs[i])){
+			if (ntchars.includes(cn+rs[i])){
+				if(negate){
+					cc=xor(cc,Math.pow(2,ntchars.indexOf(cn+rs[i])));
+				}else{
+					res2=or(res2,Math.pow(2,ntchars.indexOf(cn+rs[i])));
+				}
+			}
+		}
+		if ((!(/[a-z]|-/.test(rs[i])))||rs[i+1]==undefined&&cc>0){
+			res2=or(res2,cc);
+		}
 	}
 	return [res,res2];
 }
@@ -524,16 +263,17 @@ function outputThings(){
 	osl.innerHTML="";
 	var pat=listPatterns(inp);
 	for (var i=0;i<pat.length;i++){
+		var s="This pattern works in "+(pat[i][1]!=pat[i][2]?("rules "+pat[i][1]+" - "+pat[i][2]):("only "+pat[i][1]))+". It is a period "+pat[i][4]+" "+pat[i][3]+". Apgcode: "+pat[i][5]+", RLE: "+pat[i][0]+"<br \>";
 		if (!document.getElementById("hidesl").checked){
 			if (pat[i][3]=="still life"){
-				osl.innerHTML+="This pattern works in rules "+pat[i][1]+" - "+pat[i][2]+". It is a period "+pat[i][4]+" "+pat[i][3]+". Apgcode: "+pat[i][5]+", RLE: "+pat[i][0]+"<br \>";
+				osl.innerHTML+=s;
 			}
 		}
 		if (pat[i][3]=="spaceship"){
-			os.innerHTML+="This pattern works in rules "+pat[i][1]+" - "+pat[i][2]+". It is a period "+pat[i][4]+" "+pat[i][3]+". Apgcode: "+pat[i][5]+", RLE: "+pat[i][0]+"<br \>";
+			os.innerHTML+=s;
 		}
 		if (pat[i][3]=="oscillator"){
-			oo.innerHTML+="This pattern works in rules "+pat[i][1]+" - "+pat[i][2]+". It is a period "+pat[i][4]+" "+pat[i][3]+". Apgcode: "+pat[i][5]+", RLE: "+pat[i][0]+"<br \>";
+			oo.innerHTML+=s;
 		}
 	}
 }
@@ -759,6 +499,7 @@ function minmaxrule(rle,gens,rule){ //here we go :(
 			if (univ[j][3]) univ[j][2]=1
 			else univ.splice(j,1)
 		}
+		console.log(univ)
 	}
 	return ["B"+ruletostring(minrule[0])+"/S"+ruletostring(minrule[1]),"B"+ruletostring(maxrule[0])+"/S"+ruletostring(maxrule[1])]
 }
